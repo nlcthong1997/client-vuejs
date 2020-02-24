@@ -26,27 +26,30 @@ export default {
 			auth: false
 		}
 	},
+	computed: {
+		
+	},
 	mounted() {
-		let user = localStorage.getItem('user');
-		axios.get('http://localhost:5000/api/home/', {
-			headers: {
-				'x-access-token': user.access_token,
-				'x-refesh-token': user.refresh_token
-			}
-		})
-          .then(res => {
-            //   if (res.data.authenticated) {
-            //   	localStorage.setItem('user', JSON.stringify(res.data));
-            //   	this.$router.push('/home');
-            //   } else {
-            //   	localStorage.removeItem('user');
-          		// this.$router.push('/');
-            //   }
-            console.log('ressssss', res.data);
-          })
-          .catch(err => {
-          	console.log(err);
-          })
+		let user = JSON.parse(localStorage.getItem('user'));
+		if (user == null) {
+      localStorage.removeItem('user');
+			this.$router.push('/');
+		} else {
+      axios.get('http://localhost:5000/api/home/', {
+        headers: {
+          'x-access-token': user.access_token,
+          'x-refresh-token': user.refresh_token
+        }
+      })
+      .then(res => {
+        console.log('Respond|home|mounted: ', res);
+        this.auth = true
+      })
+      .catch(err => {
+        console.log('Error|home|mounted: ', err);
+        this.$router.push('/login');
+      })
+    }
 	},
 	components: {
 	    LeftMenu, RightContent

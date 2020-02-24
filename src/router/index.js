@@ -10,14 +10,30 @@ const routes = [
     component: () => import('../views/Intro.vue')
   },
   {
-    path: '/home',
-    name: 'home',
-    component: () => import('../views/Home.vue')
-  },
-  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/home',
+    component: () => import('../views/Home.vue'),
+    children: [
+      {
+        path: '',
+        name: 'thong-tin-ca-nhan',
+        component: () => import('../views/InfoCustomer.vue')
+      },
+      // {
+      //   path: 'chuyen-tien-noi-ngan-hang',
+      //   name: 'chuyen-tien-noi',
+      //   component: () => import('../views/ChuyenTienNoi.vue')
+      // },
+      // {
+      //   path: 'chuyen-tien-lien-ngan-hang',
+      //   name: 'chuyen-tien-lien',
+      //   component: () => import('../views/ChuyenTienLien.vue')
+      // }
+    ]
   }
 ]
 

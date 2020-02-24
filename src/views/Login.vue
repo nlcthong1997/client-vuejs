@@ -35,25 +35,12 @@
                 ></b-form-input>
               </b-form-group>
 
-              
               <b-form-group
                 id="input-group-3"
-                label="Nhập mã:"
+                label="Xác nhận"
                 label-for="input-3"
               >
-                <b-row>
-                  <b-col>
-                    <b-form-input
-                      id="input-3"
-                      v-model="form.confirm"
-                      required
-                      placeholder="Mã xác nhận"
-                    ></b-form-input>  
-                  </b-col>
-                  <b-col>
-                    <h3><b-badge variant="secondary">LKJGLDS</b-badge></h3>
-                  </b-col>
-                </b-row>
+                <div id="html_ggcaptcha"></div>
               </b-form-group>
               
               <b-button type="submit" block variant="success"><h5>Đăng nhập</h5></b-button>
@@ -76,29 +63,48 @@ export default {
               username: '',
               password: '',
               confirm: ''
-            }
+            },
+            captcha_site_key: '6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY',
+            rcapt_id: 0
+            // ggrecaptcha: function onloadCallback()
         }
+    },
+    mounted() {
+      this.onloadCallback();
     },
     methods: {
       onSubmit(evt) {
         evt.preventDefault();
-        this.login(this.form);
+  
+        // if (grecaptcha.getResponse(onloadCallback.call) == "") {
+        //     alert("You can't proceed!");
+        // } else {
+        //     alert("Thank you");
+        // }
+        // this.login(this.form);
+        // console.log(onloadCallback);
+        
       },
       login(data) {
         axios
           .post('http://localhost:5000/api/login/', data)
           .then(res => {
               if (res.data.authenticated) {
-              	localStorage.setItem('user', JSON.stringify(res.data));
+                localStorage.setItem('user', JSON.stringify(res.data));
               	this.$router.push('/home');
               } else {
               	localStorage.removeItem('user');
-          		this.$router.push('/');
+          		  this.$router.push('/login');
               }
           })
           .catch(err => {
           	console.log(err);
           })
+      },
+      onloadCallback() {
+        grecaptcha.render('html_ggcaptcha', {
+          'captcha_site_key' : '6LcebtsUAAAAAE7Geu4ZevovW18'
+        });
       }
     }
 }

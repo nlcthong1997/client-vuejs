@@ -40,9 +40,9 @@
                 label="Xác nhận"
                 label-for="input-3"
               >
-                <div id="html_ggcaptcha"></div>
+                <div id="el_ggReCaptCha"></div>
               </b-form-group>
-              
+              <input type="hidden" id="respond_recaptcha"/>
               <b-button type="submit" block variant="success"><h5>Đăng nhập</h5></b-button>
 
             </b-form>
@@ -62,33 +62,26 @@ export default {
             form: {
               username: '',
               password: '',
-              confirm: ''
-            },
-            captcha_site_key: '6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY',
-            rcapt_id: 0
-            // ggrecaptcha: function onloadCallback()
+              recaptcha: '',
+            }
         }
     },
     mounted() {
-      this.onloadCallback();
+    },
+    computed: {
     },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault();
-  
-        // if (grecaptcha.getResponse(onloadCallback.call) == "") {
-        //     alert("You can't proceed!");
-        // } else {
-        //     alert("Thank you");
-        // }
-        // this.login(this.form);
-        // console.log(onloadCallback);
-        
+      onSubmit(e) {
+        e.preventDefault();
+        this.setCaptchaVal();
+        console.log(this.form.recaptcha);
+        this.login(this.form);
       },
       login(data) {
         axios
           .post('http://localhost:5000/api/login/', data)
           .then(res => {
+            console.log("tai sao", res)
               if (res.data.authenticated) {
                 localStorage.setItem('user', JSON.stringify(res.data));
               	this.$router.push('/home');
@@ -101,10 +94,8 @@ export default {
           	console.log(err);
           })
       },
-      onloadCallback() {
-        grecaptcha.render('html_ggcaptcha', {
-          'captcha_site_key' : '6LcebtsUAAAAAE7Geu4ZevovW18'
-        });
+      setCaptchaVal() {
+        this.form.recaptcha = document.getElementById('respond_recaptcha').value;
       }
     }
 }

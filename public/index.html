@@ -11,7 +11,19 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+      <script>
+        var verifyCallback = function(response) {
+            document.getElementById('respond_recaptcha').value = response;
+          }
+        var onloadCallback = function(response) {
+          grecaptcha.render('el_ggReCaptCha', {
+            'sitekey' : '6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY',
+            'callback' : verifyCallback,
+          });
+        };
+      </script>
+    </div>
     <!-- built files will be auto injected -->
   </body>
   <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>

@@ -40,9 +40,12 @@
                 label="Xác nhận"
                 label-for="input-3"
               >
-                <div id="el_ggReCaptCha"></div>
+                <VueRecaptcha
+                  sitekey="6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY"
+                  @verify="onVerify"
+                  @expired="onExpired"
+                />
               </b-form-group>
-              <input type="hidden" id="respond_recaptcha"/>
               <b-button type="submit" block variant="success"><h5>Đăng nhập</h5></b-button>
 
             </b-form>
@@ -55,49 +58,58 @@
 
 <script>
 import axios from 'axios';
+import VueRecaptcha from 'vue-recaptcha';
 
 export default {
-    data() {
-        return {
-            form: {
-              username: '',
-              password: '',
-              recaptcha: '',
-            }
-        }
-    },
-    mounted() {
-    },
-    computed: {
-    },
-    methods: {
-      onSubmit(e) {
-        e.preventDefault();
-        this.setCaptchaVal();
-        console.log(this.form.recaptcha);
-        this.login(this.form);
-      },
-      login(data) {
-        axios
-          .post('http://localhost:5000/api/login/', data)
-          .then(res => {
-            console.log("tai sao", res)
-              if (res.data.authenticated) {
-                localStorage.setItem('user', JSON.stringify(res.data));
-              	this.$router.push('/home');
-              } else {
-              	localStorage.removeItem('user');
-          		  this.$router.push('/login');
-              }
-          })
-          .catch(err => {
-          	console.log(err);
-          })
-      },
-      setCaptchaVal() {
-        this.form.recaptcha = document.getElementById('respond_recaptcha').value;
+  components: { VueRecaptcha },
+  data() {
+      return {
+          form: {
+            username: '',
+            password: '',
+            recaptcha: '',
+          }
       }
+  },
+  created() {
+
+  },
+  mounted() {
+
+  },
+  computed: {
+
+  },
+  methods: {
+    onSubmit(e) {
+      e.preventDefault();
+      this.login(this.form);
+    },
+    login(data) {
+      axios
+        .post('http://localhost:5001/api/login/', data)
+        .then(res => {
+          console.log("tai sao", res)
+            if (res.data.authenticated) {
+              localStorage.setItem('user', JSON.stringify(res.data));
+              this.$router.push('/home');
+            } else {
+              localStorage.removeItem('user');
+              this.$router.push('/login');
+            }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
+    onVerify (response) {
+      this.form.recaptcha = response;
+      console.log(this.ahihi)
+    },
+    onExpired () {
+      console.log('Expired')
     }
+  }
 }
 </script>
 

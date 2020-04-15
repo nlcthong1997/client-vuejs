@@ -40,11 +40,11 @@
                 label="Xác nhận"
                 label-for="input-3"
               >
-                <VueRecaptcha
+                <!-- <VueRecaptcha
                   sitekey="6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY"
                   @verify="onVerify"
                   @expired="onExpired"
-                />
+                /> -->
               </b-form-group>
               <b-button type="submit" block variant="success"><h5>Đăng nhập</h5></b-button>
 
@@ -57,11 +57,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-import VueRecaptcha from 'vue-recaptcha';
+// import axios from 'axios';
+// import VueRecaptcha from 'vue-recaptcha';
 
 export default {
-  components: { VueRecaptcha },
+  // components: { VueRecaptcha },
   data() {
       return {
           form: {
@@ -85,30 +85,30 @@ export default {
       e.preventDefault();
       this.login(this.form);
     },
-    login(data) {
-      axios
-        .post('http://localhost:5001/api/login/', data)
-        .then(res => {
-          console.log("tai sao", res)
-            if (res.data.authenticated) {
-              localStorage.setItem('user', JSON.stringify(res.data));
-              this.$router.push('/home');
-            } else {
-              localStorage.removeItem('user');
-              this.$router.push('/login');
-            }
-        })
-        .catch(err => {
-          console.log(err);
-        })
-    },
-    onVerify (response) {
-      this.form.recaptcha = response;
-      console.log(this.ahihi)
-    },
-    onExpired () {
-      console.log('Expired')
-    }
+    // login(data) {
+    //   axios
+    //     .post('http://localhost:5001/api/login/', data)
+    //     .then(res => {
+    //       console.log("tai sao", res)
+    //         if (res.data.authenticated) {
+    //           localStorage.setItem('user', JSON.stringify(res.data));
+    //           this.$router.push('/home');
+    //         } else {
+    //           localStorage.removeItem('user');
+    //           this.$router.push('/login');
+    //         }
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     })
+    // },
+    // onVerify (response) {
+    //   this.form.recaptcha = response;
+    //   console.log(this.ahihi)
+    // },
+    // onExpired () {
+    //   console.log('Expired')
+    // }
   }
 }
 </script>

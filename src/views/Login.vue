@@ -87,7 +87,7 @@ export default {
     },
     login(data, recaptcha) {
       axios
-        .post('http://localhost:3001/auth/login/', data, { headers: { "x-capcha": recaptcha } })
+        .post('localhost:3001/auth/login/', data, { headers: { "x-capcha": recaptcha, 'Access-Control-Allow-Origin': '*' } })
         .then(res => {
             if (res.data.accessToken && res.data.refreshToken) {
               localStorage.setItem('user', JSON.stringify(res.data));

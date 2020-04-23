@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view :loggedLv1="logged" v-on:eventLoggedLv1="changeStatusLogged" />
   </div>
 </template>
 
@@ -8,6 +8,16 @@
   
 
   export default {
+    data () {
+      return {
+        logged: false
+      }
+    },
+    methods: {
+      changeStatusLogged(data) {
+        this.logged = data.status;
+      }
+    },
     components: {
     }
   };

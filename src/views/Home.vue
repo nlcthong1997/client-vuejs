@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <div class="container">
+    <div class="container" v-if="loggedLv1">
       <b-row>
         <b-col sm="3">
           <LeftMenu />
         </b-col>
         <b-col sm="9">
-          <RightContent />
+          <RightContent :loggedLv2="loggedLv1"/>
         </b-col>
       </b-row>
     </div>
@@ -20,33 +20,34 @@ import RightContent from "@/components/RightContent.vue";
 
 export default {
   name: "home",
-  data() {
-    return {
-      auth: false,
-    };
+  props: {
+    loggedLv1: { type: Boolean, default: false }
+  },
+  created() {
+    // this.fetchData();
   },
   computed: {},
-  mounted() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // if (user == null) {
-    //   localStorage.removeItem("user");
-    //   this.$router.push("/");
-    // } else {
+  mounted() {},
+  methods: {
+    // fetchData() {
+    //   let user = JSON.parse(localStorage.getItem("user"));
+    //   if (!user) {
+    //     localStorage.removeItem("user");
+    //     this.$router.push("/");
+    //   }
     //   axios
-    //     .get("http://localhost:5000/api/home/", {
-    //       headers: {
-    //         "x-access-token": user.access_token,
-    //         "x-refresh-token": user.refresh_token,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       console.log("Respond|home|mounted: ", res);
-    //       this.auth = true;
-    //     })
-    //     .catch((err) => {
-    //       console.log("Error|home|mounted: ", err);
-    //       this.$router.push("/login");
-    //     });
+    //       .get("http://192.168.100.7:3001/user/info-customer/", {
+    //         headers: {
+    //           "x-access-token": user.accessToken,
+    //         },
+    //       })
+    //       .then((res) => {
+    //         console.log(res.data.customer);
+    //         this.auth = true;
+    //       })
+    //       .catch((err) => {
+    //         this.$router.push("/login");
+    //       });
     // }
   },
   components: {

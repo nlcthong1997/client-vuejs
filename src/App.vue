@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view :loggedLv1="logged" v-on:eventLoggedLv1="changeStatusLogged" />
+    <router-view :loggedLv1="logged" @eventLoggedLv1="changeStatusLogged" />
   </div>
 </template>
 

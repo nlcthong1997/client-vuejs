@@ -6,7 +6,7 @@
           <LeftMenu />
         </b-col>
         <b-col sm="9">
-          <RightContent :loggedLv2="loggedLv1"/>
+          <RightContent :loggedLv2="loggedLv1" @eventLoggedLv2="changeStatusLogged"/>
         </b-col>
       </b-row>
     </div>
@@ -24,31 +24,16 @@ export default {
     loggedLv1: { type: Boolean, default: false }
   },
   created() {
-    // this.fetchData();
+    if (!this.loggedLv1) {
+      this.$router.push("/login");
+    }
   },
   computed: {},
   mounted() {},
   methods: {
-    // fetchData() {
-    //   let user = JSON.parse(localStorage.getItem("user"));
-    //   if (!user) {
-    //     localStorage.removeItem("user");
-    //     this.$router.push("/");
-    //   }
-    //   axios
-    //       .get("http://192.168.100.7:3001/user/info-customer/", {
-    //         headers: {
-    //           "x-access-token": user.accessToken,
-    //         },
-    //       })
-    //       .then((res) => {
-    //         console.log(res.data.customer);
-    //         this.auth = true;
-    //       })
-    //       .catch((err) => {
-    //         this.$router.push("/login");
-    //       });
-    // }
+    changeStatusLogged(data) {
+      this.$emit('eventLoggedLv1', data);
+    }
   },
   components: {
     LeftMenu,

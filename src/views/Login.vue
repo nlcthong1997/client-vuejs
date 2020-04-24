@@ -3,6 +3,9 @@
     <b-row>
       <b-col></b-col>
       <b-col>
+        <div class="show-alert">
+          <b-alert variant="danger" v-if="showError" show>{{ contentError }}</b-alert>
+        </div>
         <b-card class="card-login">
           <b-form @submit="onSubmit">
             <div class="text-center">
@@ -55,21 +58,34 @@ export default {
         username: "",
         password: ""
       },
-      recaptcha: ""
+      recaptcha: "",
+      token: null,
+      isLoading: false,
+      showError: false,
+      contentError: ""
     };
   },
-  created() {},
+  created() {
+    localStorage.removeItem("token");
+  },
+  watch: {
+    isLoading: function(isLoad) {
+      this.redirect(isLoad && this.token);
+    }
+  },
   mounted() {},
   computed: {},
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      this.login(this.form, this.recaptcha);
+      if (this.recaptcha != "") {
+        this.login(this.form, this.recaptcha);
+      } else {
+        this.onShowError("Vui lòng đánh dấu vào capcha.");
+      }
     },
 
     async login(data, recaptcha) {
-      let promiseDone = false;
-      let response = null;
       await axios
         .post("http://192.168.100.7:3001/auth/login", data, {
           headers: {
@@ -79,33 +95,40 @@ export default {
         })
         .then(res => {
           if (res.data.accessToken && res.data.refreshToken) {
-            promiseDone = true;
-            response = res.data;
+            this.isLoading = true;
+            this.token = res.data;
           }
         })
         .catch(err => {
+          this.isLoading = true;
+          console.clear();
           console.error("Error login: ", err);
         });
-
-      this.redirec(promiseDone, response);
     },
 
-    redirec(promiseDone, response) {
-      if (promiseDone) {
-        localStorage.setItem("token", JSON.stringify(response));
+    redirect(isCheck) {
+      if (isCheck) {
+        localStorage.setItem("token", JSON.stringify(this.token));
         this.$emit("eventLoggedLv1", { status: true });
         this.$router.push("/home");
       } else {
-        localStorage.removeItem("token");
-        this.$emit("eventLoggedLv1", { status: false });
-        this.$router.push("/login");
+        this.onShowError("Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.");
       }
+    },
+
+    onShowError(message) {
+      this.showError = true;
+      this.contentError = message;
+      setTimeout(() => {
+        this.showError = false;
+        this.contentError = "";
+      }, 3000);
     },
 
     onVerify(response) {
       this.recaptcha = response;
     },
-    
+
     onExpired() {
       console.error("Capcha expired.");
     }
@@ -117,5 +140,9 @@ export default {
 .card-login {
   margin-top: 50px;
   border-color: #28a745;
+}
+.show-alert {
+  margin-top: 50px;
+  height: 50px;
 }
 </style>

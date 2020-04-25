@@ -13,9 +13,6 @@ export default {
     changeStatusLogged(data) {
       this.$emit("eventLoggedLv2", data);
     }
-  },
-  components: {
-    // InfoCustomer
   }
 };
 </script>

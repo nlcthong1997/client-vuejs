@@ -10,7 +10,7 @@
   export default {
     data () {
       return {
-        logged: false
+        logged: true
       }
     },
     methods: {

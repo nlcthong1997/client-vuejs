@@ -1,5 +1,5 @@
 <template>
-  <div class="chuyen-tien-noi-ngan-hang">
+  <div>
     <b-card title="Thông tin tài khoản">
       <div class="info">
         Kính chào quý khách

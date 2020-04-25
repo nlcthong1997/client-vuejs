@@ -68,7 +68,7 @@ export default {
     localStorage.removeItem("token");
   },
   watch: {
-    isLoading: function(isLoad) {
+    isLoading: function (isLoad) {
       this.redirect(isLoad && this.token);
     }
   },
@@ -135,7 +135,7 @@ export default {
     },
 
     resetRecaptcha () {
-      this.$refs.recaptcha.reset() // Direct call reset method
+      this.$refs.recaptcha.reset()
     },
 
     onExpired() {

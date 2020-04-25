@@ -23,16 +23,16 @@ const routes = [
         name: 'thong-tin-ca-nhan',
         component: () => import('../views/InfoCustomer.vue')
       },
-      // {
-      //   path: 'chuyen-tien-noi-ngan-hang',
-      //   name: 'chuyen-tien-noi',
-      //   component: () => import('../views/ChuyenTienNoi.vue')
-      // },
-      // {
-      //   path: 'chuyen-tien-lien-ngan-hang',
-      //   name: 'chuyen-tien-lien',
-      //   component: () => import('../views/ChuyenTienLien.vue')
-      // }
+      {
+        path: 'chuyen-tien-noi-ngan-hang',
+        name: 'chuyen-tien-noi',
+        component: () => import('../views/InternalTransfer.vue')
+      },
+      {
+        path: 'chuyen-tien-lien-ngan-hang',
+        name: 'chuyen-tien-ngoai',
+        component: () => import('../views/ForeignTransfer.vue')
+      },
     ]
   }
 ]

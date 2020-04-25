@@ -4,7 +4,9 @@
       <b-col></b-col>
       <b-col>
         <div class="show-alert">
-          <b-alert variant="danger" v-if="showError" show>{{ contentError }}</b-alert>
+          <b-alert variant="danger" v-if="showError" show>
+            {{ contentError }}
+          </b-alert>
         </div>
         <b-card class="card-login">
           <b-form @submit="onSubmit">
@@ -26,11 +28,7 @@
             </b-form-group>
 
             <b-form-group id="input-group-3" label="Xác nhận" label-for="input-3">
-              <VueRecaptcha
-                sitekey="6LcebtsUAAAAAE7Geu4ZevovW18-nuGr3jI4ZVkY"
-                @verify="onVerify"
-                @expired="onExpired"
-              />
+              <VueRecaptcha :sitekey="siteKey" @verify="onVerify" @expired="onExpired" ref="recaptcha" />
             </b-form-group>
             <b-button type="submit" block variant="success">
               <h5>Đăng nhập</h5>
@@ -62,7 +60,8 @@ export default {
       token: null,
       isLoading: false,
       showError: false,
-      contentError: ""
+      contentError: "",
+      siteKey: process.env.VUE_APP_CAPCHA_KEY
     };
   },
   created() {
@@ -86,8 +85,9 @@ export default {
     },
 
     async login(data, recaptcha) {
+      const url = process.env.VUE_APP_API_URL + "/auth/login";
       await axios
-        .post("http://192.168.100.7:3001/auth/login", data, {
+        .post(url, data, {
           headers: {
             "x-capcha": recaptcha,
             "Access-Control-Allow-Origin": "*"
@@ -112,13 +112,18 @@ export default {
         this.$emit("eventLoggedLv1", { status: true });
         this.$router.push("/home");
       } else {
-        this.onShowError("Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.");
+        this.onShowError("Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.", true);
       }
     },
 
-    onShowError(message) {
+    onShowError(message, isResetCapcha = false) {
       this.showError = true;
       this.contentError = message;
+      this.isLoading = false;
+      if (isResetCapcha) {
+        this.resetRecaptcha();
+        this.recaptcha = "";
+      }
       setTimeout(() => {
         this.showError = false;
         this.contentError = "";
@@ -127,6 +132,10 @@ export default {
 
     onVerify(response) {
       this.recaptcha = response;
+    },
+
+    resetRecaptcha () {
+      this.$refs.recaptcha.reset() // Direct call reset method
     },
 
     onExpired() {

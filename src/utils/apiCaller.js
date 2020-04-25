@@ -3,7 +3,7 @@ import * as Qs from "qs";
 
 
 const instanceAPI = axios.create({
-  baseURL: 'http://192.168.100.7:3001',
+  baseURL: process.env.VUE_APP_API_URL,
   headers: {
     "Content-Type": "application/json"
   },

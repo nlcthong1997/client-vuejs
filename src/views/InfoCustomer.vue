@@ -62,6 +62,7 @@ export default {
 
       fetch("/info-customer", "GET")
         .then(res => {
+          console.log(res.data.customer);
           this.infoCustomer = res.data.customer;
           this.isTokenExpired = false;
           this.isLoadding = true;
@@ -75,9 +76,9 @@ export default {
 
     appendData(data) {
       this.items[0]["Nội dung"] = data.fullName;
-      this.items[1]["Nội dung"] = data.cardNumber;
-      this.items[2]["Nội dung"] = data.currentAmount;
-      this.items[3]["Nội dung"] = data.currency;
+      // this.items[1]["Nội dung"] = data.cardNumber;
+      // this.items[2]["Nội dung"] = data.currentAmount;
+      // this.items[3]["Nội dung"] = data.currency;
     },
 
     async getAndSetNewToken(token) {

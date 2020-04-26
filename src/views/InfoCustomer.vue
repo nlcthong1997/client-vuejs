@@ -47,7 +47,7 @@ export default {
       isTokenExpired: false,
       isLoadding: false,
       options: [],
-      selected: null
+      selected: {}
     };
   },
   created() {

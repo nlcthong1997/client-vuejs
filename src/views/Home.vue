@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <div class="container" v-if="loggedLv1">
+    <div class="container">
       <b-row>
         <b-col sm="3">
           <LeftMenu />
         </b-col>
         <b-col sm="9">
-          <RightContent :loggedLv2="loggedLv1" @eventLoggedLv2="changeStatusLogged"/>
+          <RightContent />
         </b-col>
       </b-row>
     </div>
@@ -14,31 +14,20 @@
 </template>
 
 <script>
-// import axios from "axios";
 import LeftMenu from "@/components/LeftMenu.vue";
 import RightContent from "@/components/RightContent.vue";
 
 export default {
   name: "home",
-  props: {
-    loggedLv1: { type: Boolean, default: false }
-  },
-  created() {
-    if (!this.loggedLv1) {
-      this.$router.push("/login");
-    }
-  },
+  props: {},
+  created() {},
   computed: {},
   mounted() {},
-  methods: {
-    changeStatusLogged(data) {
-      this.$emit('eventLoggedLv1', data);
-    }
-  },
+  methods: {},
   components: {
     LeftMenu,
-    RightContent,
-  },
+    RightContent
+  }
 };
 </script>
 

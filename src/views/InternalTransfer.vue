@@ -77,6 +77,22 @@ export default {
           { value: 'd', text: 'This one is disabled', disabled: true }
         ]
     }
+  },
+  created() {
+    this.checkToken();
+  },
+  methods: {
+    checkToken() {
+      const token = JSON.parse(localStorage.getItem("token"));
+      if (!token || token == '') {
+        this.removeClientData();
+      }
+    },
+
+    removeClientData() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    }
   }
 };
 </script>

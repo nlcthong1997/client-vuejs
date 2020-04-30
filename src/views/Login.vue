@@ -47,7 +47,7 @@ import VueRecaptcha from "vue-recaptcha";
 
 export default {
   props: {
-    loggedLv1: { type: Boolean, default: false }
+    
   },
   components: { VueRecaptcha },
   data() {
@@ -109,7 +109,6 @@ export default {
     redirect(isCheck) {
       if (isCheck) {
         localStorage.setItem("token", JSON.stringify(this.token));
-        this.$emit("eventLoggedLv1", { status: true });
         this.$router.push("/home");
       } else {
         this.onShowError("Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.", true);

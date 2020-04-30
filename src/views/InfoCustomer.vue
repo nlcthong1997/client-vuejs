@@ -37,9 +37,7 @@
 import { fetch } from "../utils/apiCaller";
 
 export default {
-  props: {
-    loggedLv3: { type: Boolean, default: false }
-  },
+  props: {},
   data() {
     return {
       infoCustomer: {},
@@ -51,6 +49,7 @@ export default {
     };
   },
   created() {
+    this.checkToken();
     this.fetchData();
   },
   watch: {
@@ -70,13 +69,6 @@ export default {
   },
   methods: {
     fetchData() {
-      let tokenStorage = JSON.parse(localStorage.getItem("token"));
-
-      if (!tokenStorage || !this.loggedLv3) {
-        this.removeClientData();
-        this.$router.push("/");
-      }
-
       fetch("/info-customer", "GET")
         .then(res => {
           this.infoCustomer = res.data.customer;
@@ -124,9 +116,15 @@ export default {
       }
     },
 
+    checkToken() {
+      const token = JSON.parse(localStorage.getItem("token"));
+      if (!token || token == '') {
+        this.removeClientData();
+      }
+    },
+
     removeClientData() {
       localStorage.removeItem("token");
-      this.$emit("eventLoggedLv3", { status: false });
       this.$router.push("/login");
     }
   }

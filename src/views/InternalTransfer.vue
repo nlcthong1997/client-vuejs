@@ -19,26 +19,49 @@
           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Số dư hiện tại">
             <b-row>
               <b-col cols="9">
-                <b-form-input id="currentAmount" name="currentAmount" value="5000" readonly="readonly"></b-form-input>
+                <b-form-input id="currentAmount" name="currentAmount" :value="selected.amount" readonly="readonly"></b-form-input>
               </b-col>
               <b-col>
-                <b-form-input id="currency" name="currency" value="VND" readonly="readonly"></b-form-input>
+                <b-form-input id="currency" name="currency" :value="selected.currency" readonly="readonly"></b-form-input>
               </b-col>
             </b-row>
           </b-form-group>
 
-          <div class="line-bar"></div>
+          <b-form-checkbox
+            id="checkbox-1"
+            v-model="checkbox_data"
+            name="checkbox-1"
+            value="checked"
+            unchecked-value="not_checked"
+            class="line-bar-1"
+          >
+            Người nhận mới
+          </b-form-checkbox>
 
-          <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Tài khoản nhận">
-            <b-form-input id name></b-form-input>
-          </b-form-group>
+          <div v-if="checkbox_data == 'checked'">
+            <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Tên gợi nhớ">
+              <b-form-input id name></b-form-input>
+            </b-form-group>
+
+            <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Tài khoản nhận">
+              <b-form-input id name></b-form-input>
+            </b-form-group>
+          </div>
+          <div v-else>
+            <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Tên gợi nhớ">
+              <b-form-select v-model="selectedReceivers" :options="optionReceivers"></b-form-select>
+            </b-form-group>
+
+            <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Tài khoản nhận">
+              <b-form-input id="cardNumberReceiver" :value="selectedReceivers.card" ></b-form-input>
+            </b-form-group>
+          </div>
+
+          <div class="line-bar"></div>
 
           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Số tiền chuyển">
             <b-form-input id name></b-form-input>
           </b-form-group>
-
-          <div class="line-bar"></div>
-
           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Phí chuyển tiền">
             <b-form-input id name></b-form-input>
           </b-form-group>
@@ -53,7 +76,7 @@
             </b-row>
           </b-form-group>
       
-          <div class="line-bar"></div>
+          <div class="line-bar-2"></div>
 
           <b-button class="float-right" variant="success">Chuyển tiền</b-button>
 
@@ -65,23 +88,76 @@
 </template>
 
 <script>
+import { fetch } from "../utils/apiCaller";
+
 export default {
   data() {
     return {
-      selected: null,
-      options: [
-          { value: null, text: 'Please select an option' },
-          { value: 'a', text: 'This is First option' },
-          { value: 'b', text: 'Selected Option' },
-          { value: { C: '3PO' }, text: 'This is an option with object value' },
-          { value: 'd', text: 'This one is disabled', disabled: true }
-        ]
+      selected: {},
+      options: [],
+      selectedReceivers: {},
+      optionReceivers: [],
+      checkbox_data: 'not_checked',
+      isLoading: false,
+      isTokenExpired: false,
+      infoCustomer: {},
+      listCard: [],
+      receivers: []
     }
   },
   created() {
-    this.checkToken();
+    // this.checkToken(); 
+    this.fetchData();
+  },
+  watch: {
+    isLoading: function(isLoad) {
+      if (isLoad) {
+        this.appendListCard(this.listCard);
+        this.appendReceivers(this.receivers);
+        console.log(isLoad)
+      }
+    }
   },
   methods: {
+    fetchData() {
+      fetch('/info-customer/info-transfer-internal', 'GET')
+        .then(res => {
+          this.infoCustomer = res.data.customer;
+          this.listCard = res.data.listCard;
+          this.receivers = res.data.receivers;
+          this.isLoading = true;
+          this.isTokenExpired = false;
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+
+    appendListCard(listCard){
+      listCard.map(card => {
+        if (card.type == "pay") {
+          this.selected = {
+            amount: card.currentAmount,
+            currency: card.currency
+          };
+        }
+        this.options.push({
+          value: { amount: card.currentAmount, currency: card.currency },
+          text: card.cardNumber
+        });
+      });
+    },
+
+    appendReceivers(receivers) {
+      receivers.map(receiver => {
+        this.optionReceivers.push({
+          value: { card: receiver.cardNumberReceiver },
+          text: receiver.otherNameReceiver
+        });
+      });
+    },
+
     checkToken() {
       const token = JSON.parse(localStorage.getItem("token"));
       if (!token || token == '') {
@@ -100,6 +176,14 @@ export default {
 <style>
 .form-transfer {
   margin-top: 2em;
+}
+.line-bar-1 {
+  margin-top: 3em;
+  margin-bottom: 1em;
+}
+.line-bar-2 {
+  margin-top: 2em;
+  margin-bottom: 1em;
 }
 .line-bar {
   margin-top: 3em;

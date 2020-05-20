@@ -33,6 +33,16 @@ const routes = [
         name: 'chuyen-tien-ngoai',
         component: () => import('../views/ForeignTransfer.vue')
       },
+      {
+        path: 'lich-su-giao-dich',
+        name: 'lịch-su',
+        component: () => import('../views/HistoryTransfer.vue')
+      },
+      {
+        path: 'doi-mat-khau',
+        name: 'doi-mat-khau',
+        component: () => import('../views/ChangePassword.vue')
+      },
     ]
   }
 ]

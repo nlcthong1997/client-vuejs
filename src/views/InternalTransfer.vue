@@ -62,6 +62,11 @@
           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Số tiền chuyển">
             <b-form-input id name></b-form-input>
           </b-form-group>
+
+           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Nội dung">
+            <b-form-input id name></b-form-input>
+          </b-form-group>
+
           <b-form-group id label-cols-sm="4" label-cols-lg="3" label="Phí chuyển tiền">
             <b-form-input id name></b-form-input>
           </b-form-group>
